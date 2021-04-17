@@ -1,9 +1,10 @@
 FROM node:12-alpine AS builder
-WORKDIR /usr/src/app
-COPY package*.json .
+ENV APP_PATH=/usr/src/app/
+WORKDIR $APP_PATH
+COPY package*.json $APP_PATH
 RUN npm install
-COPY . ./
+COPY . $APP_PATH
 RUN npm run build
 
 FROM nginx:stable-alpine
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html/
